@@ -58,6 +58,20 @@ app.post("/", function(req,res)
     })
 })
 
+app.get("/checkup", function(req,res){
+    const username = req.headers.username;
+    const password = req.headers.password;
+    const kidneyId = req.query.kidneyId;
+    if(username==="suraj" && password==="123")
+        {
+            if(kidneyId==1 || kidneyId==2)
+            {
+            res.status(200).json({msg : "your health is fine"})
+        }}
+        res.status(400).json({msg : "wrong input"})
+    }
+    )
+
 app.listen(port, () => {
   console.log("Server is runnning on port : " + port);
 });
