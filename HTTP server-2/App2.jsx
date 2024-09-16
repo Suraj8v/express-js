@@ -16,6 +16,7 @@ function userMiddleware(req,res,next)
     }
 }
 
+
 function kidneyMiddleWare (req, res, next)
 {
     const response = schema.safeParse(req.query.kidneyId)
@@ -35,3 +36,4 @@ app.get("/kidney-checkup",userMiddleware,kidneyMiddleWare,function(req,res)
 app.listen(3000, ()=>{
     console.log("your app is running at port 3000")
 })
+
