@@ -12,6 +12,10 @@ const users = [
     {
         username : "rohit",
         password : "112233"
+    },
+    {
+        username : "virat",
+        password : "2233"
     }
 ]
 
@@ -22,7 +26,7 @@ function userExists(username, password)
     return isPresent;
 }
 
-app.post("/1",function(req,res)
+app.post("/signin",function(req,res)
 {
     const uname = req.headers.username;
     const pass = req.headers.password;
@@ -35,6 +39,31 @@ app.post("/1",function(req,res)
     return res.json({
         token
     })
+
+})
+
+app.get("/users", function(req,res)
+{
+    const token = req.headers.authorization;
+    let allUsers = [];
+
+    try{
+         const decode = jwt.verify(token,jwtPassword);
+         const username = decode.username;
+         for(let i=0; i<users.length; i++)
+         {
+            if(username!==users[i].username)
+            {
+                allUsers.push(users[i].username)
+            }
+         }
+        return res.json({allUsers})
+
+    } catch(error)
+    {
+        console.log(error)
+        return res.status(403).json({msg : "invalid token"})
+    }
 
 })
 
