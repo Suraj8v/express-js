@@ -1,8 +1,13 @@
 const express = require("express")
 const jwt = require("jsonwebtoken")
+const mongoose = require("mongoose")
 const app = express()
 app.use(express.json())
 const jwtPassword = "123"
+
+mongoose.connect("mongodb+srv://suraj:suraj123@cluster0.roipnq8.mongodb.net/users_app?retryWrites=true&w=majority&appName=Cluster0")
+
+const user = mongoose.model('users',{username: String, password:String})
 
 const users = [
     {
@@ -39,7 +44,24 @@ app.post("/signin",function(req,res)
     return res.json({
         token
     })
+})
 
+app.post("/signup",async function(req,res){
+    const username = req.body.username;
+    const password = req.body.password;
+
+    const existingUser = await user.findOne({username : username})
+    if(existingUser)
+    {
+        res.status(400).send("username already exists")
+    }
+    const newUser = new user({
+        username : username,
+        password : password
+    })
+
+    newUser.save();
+   return res.json({msg:"user signed up successfully!"})
 })
 
 app.get("/users", function(req,res)
