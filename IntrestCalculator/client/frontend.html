@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="Interestform">
+        <label>Principle</label>
+        <input type="text" placeholder="principle" name="principle" id="principle" required> <br><br>
+
+        <label>Rate</label>
+        <input type="text" name="Rate" id="rate" placeholder="rate" required> <br><br>
+
+        <label>Time</label>
+        <input type="text" id="time" placeholder="time" name="time" required> <br><br>
+
+        <input type="submit" id="btn" value="Calculate"><br>
+    </form>
+
+    <div id="result"></div>
+    
+    <script>
+        document.getElementById("Interestform").addEventListener("submit", function(e){
+            e.preventDefault();
+
+            // Capture form values inside the event listener
+            const principle = document.getElementById("principle").value;
+            const rate = document.getElementById("rate").value;
+            const time = document.getElementById("time").value;
+
+            // Make the fetch request here
+            fetch("http://localhost:3000/interest", {
+                method: "POST",  
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({principle, rate, time})  // Send form data
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById("result");
+                resultDiv.innerHTML = `<p>Total: ${data.total}, Interest: ${data.interest}</p>`;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        });
+    </script>
+</body>
+</html>
